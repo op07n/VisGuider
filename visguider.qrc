@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/font">
+        <file alias="fa">res/fontawesome-webfont.ttf</file>
+    </qresource>
+    <qresource prefix="/icon">
+        <file>res/gur-project/gur-project-30.png</file>
+        <file>res/gur-project/gur-project-29.png</file>
+        <file>res/gur-project/gur-project-28.png</file>
+        <file>res/gur-project/gur-project-27.png</file>
+        <file>res/gur-project/gur-project-26.png</file>
+        <file>res/gur-project/gur-project-25.png</file>
+        <file>res/gur-project/gur-project-24.png</file>
+        <file>res/gur-project/gur-project-22.png</file>
+        <file>res/gur-project/gur-project-19.png</file>
+        <file>res/gur-project/gur-project-23.png</file>
+        <file>res/gur-project/gur-project-20.png</file>
+        <file>res/gur-project/gur-project-21.png</file>
+        <file>res/gur-project/gur-project-18.png</file>
+        <file>res/gur-project/gur-project-17.png</file>
+        <file>res/gur-project/gur-project-16.png</file>
+        <file>res/gur-project/gur-project-15.png</file>
+        <file>res/gur-project/gur-project-10.png</file>
+        <file>res/gur-project/gur-project-01.png</file>
+        <file>res/gur-project/gur-project-03.png</file>
+        <file>res/gur-project/gur-project-04.png</file>
+        <file>res/gur-project/gur-project-02.png</file>
+        <file>res/gur-project/gur-project-07.png</file>
+        <file>res/gur-project/gur-project-05.png</file>
+        <file>res/gur-project/gur-project-11.png</file>
+        <file>res/gur-project/gur-project-12.png</file>
+        <file>res/gur-project/gur-project-08.png</file>
+        <file>res/gur-project/gur-project-14.png</file>
+        <file>res/gur-project/gur-project-09.png</file>
+        <file>res/gur-project/gur-project-06.png</file>
+        <file>res/gur-project/gur-project-13.png</file>
+    </qresource>
+</RCC>
