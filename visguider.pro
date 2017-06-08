@@ -9,6 +9,14 @@ include(/Users/hehao/marble/qt_Marble.pri)
 QT += Marble
 QT       += core gui
 
+CONFIG   += precompile_header
+
+# Use Precompiled headers (PCH)
+PRECOMPILED_HEADER  = stdafx.h
+precompile_header:!isEmpty(PRECOMPILED_HEADER) {
+  DEFINES += USING_PCH
+}
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = visguider
@@ -27,9 +35,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    visuallayer.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    visuallayer.h \
+    stdafx.h
 
 FORMS    += mainwindow.ui
 
