@@ -1,10 +1,7 @@
+#include "stdafx.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <marble/GeoDataLatLonBox.h>
-using namespace Marble;
-#include <QFontDatabase>
-#include <QDebug>
-#include <QFontInfo>
+#include "visuallayer.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,18 +16,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     // Load the OpenStreetMap map
+    //mapWidget->setMapThemeId( "earth/plain/plain.dgml" );
     mapWidget->setMapThemeId( "earth/bluemarble/bluemarble.dgml" );
     //mapWidget->setMapThemeId( "earth/openstreetmap/openstreetmap.dgml" );
     mapWidget->setProjection( Spherical);//Mercator );
-    GeoDataCoordinates coord(25.97, 44.43, 0,GeoDataCoordinates::Degree);
+    GeoDataCoordinates coord(116, 39, 0,GeoDataCoordinates::Degree);
     mapWidget->centerOn(coord);
 
     mapWidget->setShowOverviewMap(false);
     mapWidget->setShowClouds(true);
     // Hide the FloatItems: OverviewMap, ScaleBar and Compass
-//        mapWidget->setShowOverviewMap(false);
-//        mapWidget->setShowScaleBar(false);
-//        mapWidget->setShowCompass(false);
+    //        mapWidget->setShowOverviewMap(false);
+    //        mapWidget->setShowScaleBar(false);
+    //        mapWidget->setShowCompass(false);
     mapWidget->setShowTerrain(true);
 
     //zoom
@@ -39,55 +37,45 @@ MainWindow::MainWindow(QWidget *parent) :
     //mapWidget->setFont(this->font());
     mapWidget->setDefaultFont(mapWidget->font());
 
-    QSharedPointer<GeoDataStyle> style=QSharedPointer<GeoDataStyle>(new GeoDataStyle);
-    //GeoDataStyle* style = new GeoDataStyle;
-    GeoDataIconStyle iconStyle;
-    iconStyle.setIconPath( ":/icon/res/gur-project/gur-project-30.png" );
-    //iconStyle.setSize(QSize(32,32));
-    style->setIconStyle( iconStyle );
-    GeoDataLabelStyle labelStyle;
-    labelStyle.setFont(mapWidget->font());
-    style.data()->setLabelStyle(labelStyle);
+//    mapWidget->model()->addGeoDataFile("/Users/hehao/Downloads/Bucharest.kml");
 
-    GeoDataPlacemark *first = new GeoDataPlacemark( tr("FIRST\uf135"));
-    first->setCoordinate(116, 39, 0, GeoDataCoordinates::Degree);
-    //first->style().reset(style);
-    first->setStyle(style);
+    // Create and register our paint layer
+    m_layer = new VisualLayer(mapWidget);
+    VisualLayer* layer = m_layer;
+    mapWidget->addLayer(layer);
 
-
-    GeoDataDocument *document = new GeoDataDocument;
-    document->append(first);
-
-
-    //mapWidget->model()->treeModel()->addDocument(document);
-
-    mapWidget->model()->addGeoDataFile("/Users/hehao/Downloads/Bucharest.kml");
-
-    QFont f("FontAwesome");
-    f.setPointSize(30);
-    ui->commandLinkButton->setFont(f);
-    ui->commandLinkButton->setText("\uf021");
-
-    qDebug()<<QFontDatabase::applicationFontFamilies(0);
-
-    QFontInfo fi(mapWidget->font());
-    qDebug()<<fi.family()<<fi.styleName()<<fi.pointSize();
-
-    first->setName("Secomd");
-    iconStyle.setIconPath( ":/icon/res/gur-project/gur-project-10.png" );
-    style->setIconStyle( iconStyle );
-    GeoDataBalloonStyle ballStyle;
-    ballStyle.setText("asasd\uf021");
-    style->setBalloonStyle(ballStyle);
-    first->setStyle(style);
+    size_t mark = layer->addPlacemark("Q\uf135");
+    layer->setPlacemarkCoordinate(mark, 116, 38);
+    layer->setPlacemarkColor(mark, Qt::red);
+    layer->setPlacemarkFontSize(mark, 24);
+    layer->setPlacemarkIcon(mark, ":/nation/res/nation-ico/United-States.ico");
+    layer->setPlacemarkIconSize(mark, 16,16);
+    qDebug()<<"mark "<<mark;
+    mark = layer->addPlacemark("\uf135aaabbb");
+    layer->setPlacemarkCoordinate(mark, 116.5, 38);
+    layer->setPlacemarkIcon(mark, ":/icon/res/gur-project/gur-project-29.png");
+    layer->setPlacemarkIconSize(mark, 16,16);
+    qDebug()<<"mark "<<mark;
+    mark = layer->addPlacemark("\uf135aaabbb");
+    layer->setPlacemarkCoordinate(mark, 117.5, 38);
+    layer->setPlacemarkIcon(mark, ":/icon/res/gur-project/gur-project-21.png");
+    layer->setPlacemarkIconSize(mark, 16,16);
+    qDebug()<<"mark "<<mark;
 
 
     // Connect the map widget to the position label.
-        QObject::connect( mapWidget, SIGNAL( mouseMoveGeoPosition( QString ) ),
-                          this, SLOT( updateTitle( QString ) ) );
+    QObject::connect( mapWidget, SIGNAL( mouseMoveGeoPosition( QString ) ),
+                      this, SLOT( updateTitle( QString ) ) );
 
-        QObject::connect( mapWidget, SIGNAL( zoomChanged(int) ),
-                              this, SLOT( setMapZoomValue(int) ) );
+    QObject::connect( mapWidget, SIGNAL( zoomChanged(int) ),
+                      this, SLOT( setMapZoomValue(int) ) );
+
+    // Update each second to give the clock second resolution
+    QTimer* seconds = new QTimer(this);
+    seconds->setInterval(1000);
+    QObject::connect(seconds, SIGNAL(timeout()), mapWidget, SLOT(update()));
+    QObject::connect(seconds, SIGNAL(timeout()), this, SLOT(updateMark()));
+    seconds->start();
 
 }
 
@@ -103,7 +91,18 @@ void MainWindow::setMapZoomValue(int v)
 
 void MainWindow::updateTitle(const QString &t)
 {
-    this->setWindowTitle(tr("zoom %1-%2").arg(m_mapZoomValue).arg(t));
+    this->setWindowTitle(tr("VisGuider %1-%2").arg(m_mapZoomValue).arg(t));
+}
+
+void MainWindow::updateMark()
+{
+    size_t mark = 2;
+    qreal lon, lat, alt;
+    m_layer->getPlacemarkCoordinate(mark, lon, lat, alt);
+    //qDebug()<<lon<<lat<<alt;
+    lon += 0.01;
+    lat += 0.02;
+    m_layer->setPlacemarkCoordinate(mark, lon, lat, alt);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

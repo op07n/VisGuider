@@ -14,19 +14,6 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCommandLinkButton" name="commandLinkButton">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>200</y>
-      <width>193</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>CommandLinkButton</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="mapWidget" native="true">
     <property name="geometry">
      <rect>
@@ -37,8 +24,6 @@
      </rect>
     </property>
    </widget>
-   <zorder>mapWidget</zorder>
-   <zorder>commandLinkButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

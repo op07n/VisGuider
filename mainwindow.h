@@ -1,23 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <marble/MarbleWidget.h>
-#include <marble/MarbleGlobal.h>
-#include <marble/GeoDataDocument.h>
-#include <marble/GeoDataPlacemark.h>
-#include <marble/GeoDataLineString.h>
-#include <marble/GeoDataTreeModel.h>
-#include <marble/MarbleModel.h>
-///style
-#include <marble/GeoDataStyle.h>
-#include <marble/GeoDataIconStyle.h>
-#include <marble/GeoDataLabelStyle.h>
-#include <marble/GeoDataLineStyle.h>
-#include <marble/GeoDataPolyStyle.h>
-#include <marble/GeoDataBalloonStyle.h>
-
 #include <QMainWindow>
 #include <QResizeEvent>
+#include "visuallayer.h"
 namespace Ui {
 class MainWindow;
 }
@@ -33,6 +19,8 @@ public:
 private slots:
     void setMapZoomValue(int v);
     void updateTitle(const QString& t);
+
+    void updateMark();
 protected:
 
     void
@@ -42,6 +30,8 @@ private:
     Ui::MainWindow *ui;
     Marble::MarbleWidget *mapWidget;
     int m_mapZoomValue;
+
+    VisualLayer* m_layer;
 };
 
 #endif // MAINWINDOW_H
