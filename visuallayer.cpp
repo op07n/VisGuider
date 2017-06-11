@@ -62,43 +62,65 @@ bool VisualLayer::render(GeoPainter *painter, ViewportParams *viewport, const QS
     painter->drawPolyline(lns,"second");
 
     GeoDataCoordinates France( 2.2, 48.52, 0.0, GeoDataCoordinates::Degree );
-        painter->setPen( QColor( 0, 0, 0 ) );
-        painter->drawText( France, "France" );
+    painter->setPen( QColor( 0, 0, 0 ) );
+    painter->drawText( France, "France" );
 
-        GeoDataCoordinates Canada( -77.02, 48.52, 0.0, GeoDataCoordinates::Degree );
-        painter->setPen( QColor( 0, 0, 0 ) );
-        painter->drawText( Canada, "Canada" );
+    GeoDataCoordinates Canada( -77.02, 48.52, 0.0, GeoDataCoordinates::Degree );
+    painter->setPen( QColor( 0, 0, 0 ) );
+    painter->drawText( Canada, "Canada" );
 
-        //A line from France to Canada without tessellation
+    GeoDataCoordinates Beijing( 116.02, 38.52, 0.0, GeoDataCoordinates::Degree );
 
-        GeoDataLineString shapeNoTessellation( NoTessellation );
-        shapeNoTessellation << France << Canada;
+    //A line from France to Canada without tessellation
 
-        //painter->setPen( m_widget->oxygenSkyBlue4 );
-        QPen p = painter->pen();
-        p.setWidth(2);
-        p.setColor(Qt::cyan);
-        painter->setPen(p);
-        painter->drawPolyline( shapeNoTessellation );
+    GeoDataLineString shapeNoTessellation( NoTessellation );
+    shapeNoTessellation << France << Canada<<Beijing;
 
-        //The same line, but with tessellation
-        p.setColor(Qt::red);
-        painter->setPen(p);
-        GeoDataLineString shapeTessellate( Tessellate );
-        shapeTessellate << France << Canada;
+    //painter->setPen( m_widget->oxygenSkyBlue4 );
+    QPen p = painter->pen();
+    p.setWidth(2);
+    p.setColor(Qt::cyan);
+    painter->setPen(p);
+    painter->drawPolyline( shapeNoTessellation );
 
-        //painter->setPen( oxygenBrickRed4 );
-        painter->drawPolyline( shapeTessellate );
+    //The same line, but with tessellation
+    p.setColor(Qt::red);
+    painter->setPen(p);
+    GeoDataLineString shapeTessellate( Tessellate );
+    shapeTessellate << France << Canada;
 
-        //Now following the latitude circles
-        p.setColor(Qt::yellow);
-        painter->setPen(p);
+    //painter->setPen( oxygenBrickRed4 );
+    painter->drawPolyline( shapeTessellate );
 
-        GeoDataLineString shapeLatitudeCircle( RespectLatitudeCircle | Tessellate );
-        shapeLatitudeCircle << France << Canada;
+    //Now following the latitude circles
+    p.setColor(Qt::yellow);
+    painter->setPen(p);
 
-        //painter->setPen( oxygenForestGreen4 );
-        painter->drawPolyline( shapeLatitudeCircle );
+    GeoDataLineString shapeLatitudeCircle( RespectLatitudeCircle | Tessellate );
+    shapeLatitudeCircle << France << Canada;
+
+    //painter->setPen( oxygenForestGreen4 );
+    painter->drawPolyline( shapeLatitudeCircle );
+
+    // Draw balloons
+    int pos = 0;
+    int x = 100, y=50;
+    for(auto iter = m_balloons.begin(); iter != m_balloons.end(); ++iter)
+    {
+        QTime t = iter->start;
+        t = t.addMSecs(iter->interval);
+        if(now <= t)
+        {
+            // Display it
+            painter->drawRect(10, pos*y+10,
+                              x,y);
+            painter->drawText(10+10, pos*y+10+10,
+                              iter->name);
+            ++pos;
+            qDebug()<<"display:"<<now<<t;
+        }
+        qDebug()<<now<<t;
+    }
 
 
     return true;
@@ -299,4 +321,37 @@ void VisualLayer::initPlacemarks(size_t size)
         m_placemarks.push_back(mark);
     }
     m_widget->model()->treeModel()->addDocument(document);
+}
+
+size_t VisualLayer::addBalloon(const QString &name, int msecs, const QColor &color)
+{
+    VisualBalloon ball;
+    ball.name = name;
+    ball.start = QTime::currentTime();
+    ball.interval = msecs;
+    ball.color = color;
+
+    m_balloons.push_back(ball);
+    return m_balloons.size()-1;
+}
+
+void VisualLayer::clearBalloon()
+{
+    m_balloons.clear();
+}
+
+void VisualLayer::setBalloonInterval(size_t idx, int msecs)
+{
+    if(idx >= m_balloons.size())
+        return;
+    VisualBalloon& ball = m_balloons.at(idx);
+    ball.interval = msecs;
+}
+
+void VisualLayer::setBalloonColor(size_t idx, const QColor &color)
+{
+    if(idx >= m_balloons.size())
+        return;
+    VisualBalloon& ball = m_balloons.at(idx);
+    ball.color = color;
 }

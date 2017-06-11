@@ -32,6 +32,7 @@ using namespace Marble;
 #include <QKeyEvent>
 #include <QString>
 #include <QStringList>
+#include <QColor>
 
 #include <map>
 #include <vector>

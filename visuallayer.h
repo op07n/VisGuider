@@ -3,6 +3,14 @@
 
 #include <QObject>
 
+struct VisualBalloon {
+    QString name;
+    QColor color;
+    int interval;
+    QTime start;
+};
+
+
 class VisualLayer : public QObject, public LayerInterface
 {
     Q_OBJECT
@@ -22,7 +30,7 @@ public:
     GeoDataCoordinates approximate(const GeoDataCoordinates &base, qreal angle, qreal dist) const;
 
     /// Placemark
-    size_t addPlacemark(const QString& name);
+    size_t addPlacemark(const QString& name="");
     void removePlacemark(size_t idx);
     void clearPlacemark();
     void setPlacemarkName(size_t idx, const QString& name);
@@ -33,17 +41,25 @@ public:
     void setPlacemarkCoordinate(size_t idx, qreal longitude, qreal latitude, qreal altitude = 0,
                                 GeoDataCoordinates::Unit _unit = GeoDataCoordinates::Degree);
     void getPlacemarkCoordinate(size_t idx, qreal& longitude,  qreal& latitude, qreal& altitude);
+    void initPlacemarks(size_t size=100);
+
+    /// Balloon
+    size_t addBalloon(const QString& name="", int msecs=5000, const QColor& color=QColor(Qt::red));
+    void clearBalloon();
+    void setBalloonInterval(size_t idx, int msecs);
+    void setBalloonColor(size_t idx, const QColor& color);
 signals:
 
 public slots:
-private:
-    // Placemark
-    void initPlacemarks(size_t size=100);
+
+
 private:
     MarbleWidget* m_widget;
     int m_index;
     std::vector<GeoDataPlacemark*> m_placemarks;
     size_t m_placemarkPosition;
+    std::vector<VisualBalloon> m_balloons;
+
 
 };
 

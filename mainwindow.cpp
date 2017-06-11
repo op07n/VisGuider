@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent) :
     layer->setPlacemarkIconSize(mark, 16,16);
     qDebug()<<"mark "<<mark;
 
+    layer->addBalloon("welcome", 5000, QColor(255,0,0,128) );
+
 
     // Connect the map widget to the position label.
     QObject::connect( mapWidget, SIGNAL( mouseMoveGeoPosition( QString ) ),
