@@ -47,3 +47,12 @@ FORMS    += mainwindow.ui
 RESOURCES += \
     visguider.qrc
 
+DISTFILES += \
+    res/temp.html \
+    test.json \
+    test_land.json \
+    test_road.json \
+    test_plane.json
+
+INCLUDEPATH +=  /usr/local/include
+LIBS += /usr/local/lib/libjansson.a

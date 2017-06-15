@@ -21,6 +21,10 @@ private slots:
     void updateTitle(const QString& t);
 
     void updateMark();
+    void on_actionHome_triggered();
+
+    void updateLayer();
+
 protected:
 
     void

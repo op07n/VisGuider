@@ -269,4 +269,26 @@
         <file>res/nation-ico/Australia.ico</file>
         <file>res/nation-ico/Austria.ico</file>
     </qresource>
+    <qresource prefix="/css">
+        <file>res/css/docs.css</file>
+        <file>res/css/metro-colors.css</file>
+        <file>res/css/metro-icons.css</file>
+        <file>res/css/metro-responsive.css</file>
+        <file>res/css/metro-rtl.css</file>
+        <file>res/css/metro-schemes.css</file>
+        <file>res/css/metro.css</file>
+    </qresource>
+    <qresource prefix="/js">
+        <file>res/js/docs.js</file>
+        <file>res/js/ga.js</file>
+        <file>res/js/jquery-2.1.3.min.js</file>
+        <file>res/js/jquery-3.1.0.js</file>
+        <file>res/js/jquery-3.1.0.min.js</file>
+        <file>res/js/jquery.dataTables.min.js</file>
+        <file>res/js/metro.js</file>
+        <file>res/js/select2.min.js</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>res/temp.html</file>
+    </qresource>
 </RCC>

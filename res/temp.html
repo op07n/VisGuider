@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="qrc:/css/res/css/metro.css" rel="stylesheet">
+<link href="qrc:/css/res/css/metro-icons.css" rel="stylesheet">
+<link href="qrc:/css/res/css/metro-responsive.css" rel="stylesheet">
+</head>
+<body>
+
+<script src="qrc:/js/res/js/jquery-2.1.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="qrc:/js/res/js/jquery.dataTables.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="qrc:/js/res/js/metro.js" type="text/javascript" charset="utf-8"></script>
+<script>
+function pushMessage(cap, ctx, t, to){
+    $.Notify({
+        caption: cap,
+        content: ctx,
+        type: t,
+        timeout: to,
+        position:'left'
+    });
+}
+
+function closeAllMessage() {
+    $.Notify().closeAll();
+}
+
+</script>
+</body>
+</html>
