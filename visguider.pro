@@ -15,7 +15,7 @@ defineReplace(qtLibraryName) {
 }
 
 
-QT += Marble
+QT += marblewidget
 QT       += core gui
 
 CONFIG   += precompile_header
