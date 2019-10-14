@@ -1,0 +1,57 @@
+# GENERAL CONFIGURATION #
+#version format
+version: '1.0.{build}'
+
+#branches to build
+branches:
+  only:
+    - master
+
+#don't build on tags
+skip_tags: true
+
+# ENVIRONMENT CONFIGURATION #
+
+clone_folder: c:\%PROJECT_NAME%
+
+shallow_clone: true
+
+clone_depth: 5   
+
+environment:
+  PROJECT_NAME: visguider
+  matrix:
+  - id: msvc-x86
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    platform: x86
+    compiler: msvc-15
+    generator: "Visual Studio 15 2017"
+    QTDIR: "C:\\Qt\\5.13.0\\msvc2017"
+  - id: msvc-x64
+    APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    platform: x64
+    compiler: msvc-15
+    generator: "Visual Studio 15 2017 Win64"
+    QTDIR: "C:\\Qt\\5.13.0\\msvc2017_64"
+
+configuration:
+  - Release
+
+install:
+  - set PATH=%QTDIR%\bin;%PATH%
+  - set ORIGPATH=%PATH%
+  
+#the build fail once the job fails
+matrix:
+  fast_finish: true
+
+# BUILD CONFIGURATION #
+before_build:
+    - cd c:\%PROJECT_NAME%
+    - md build
+
+build_script:
+  - qmake visguider.pro
+  - nmake /f Makefile
+
+
