@@ -45,13 +45,20 @@ install:
 matrix:
   fast_finish: true
 
+
+
+
 # BUILD CONFIGURATION #
 before_build:
+    - if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
+    - if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
     - cd c:\%PROJECT_NAME%
     - md build
+    
+    
+    
+    
 
 build_script:
   - qmake visguider.pro
   - nmake /f Makefile
-
-
